@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema(
     lastLogin: {
       type: String,
     },
+    resetToken: {
+      type: String,
+      default: '',
+    },
   },
   {
     timestamps: true,
