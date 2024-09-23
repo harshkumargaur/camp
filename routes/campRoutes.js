@@ -4,7 +4,7 @@ const multer = require('multer');
 
 // console.log(__dirname.replace(/\\/g, '/'));
 const { campStorage, campFileFilter } = require('./../utils/multerUtility');
-
+const { userAuthMiddleware } = require('./../utils/authMiddlewareUtilitty');
 const limits = {
   fileSize: 102400, /// 100 Kb
 };
@@ -22,6 +22,7 @@ const {
   updateCamp,
   deleteCamp,
   campFileUpload,
+  userBookCamp,
 } = require('./../controllers/campControllers');
 
 router.get('/page/:pageNo', async (req, res) => {
@@ -51,6 +52,11 @@ router.patch('/:campId', async (req, res) => {
 
 router.delete('/:campId', async (req, res) => {
   await deleteCamp(req, res);
+});
+
+//////////////////////////// CAMP BOOKING ROUTES
+router.post('/:campId/book', userAuthMiddleware, async (req, res, next) => {
+  await userBookCamp(req, res, next);
 });
 
 module.exports = router;

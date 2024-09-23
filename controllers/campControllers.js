@@ -1,4 +1,6 @@
 const campModel = require('../models/Camp');
+const User = require('../models/User');
+const Booking = require('../models/Booking');
 
 //utils
 const paginationUtilty = require('.././utils/paginationHelper');
@@ -96,6 +98,37 @@ const campFileUpload = async (req, res, next) => {
   }
 };
 
+const userBookCamp = async (req, res, next) => {
+  console.log('user book camp');
+  const { campId } = req.params;
+  const userId = req.user;
+  const { numDays } = req.body;
+  const user = await User.findById(userId);
+  if (!user) {
+    return next(new Error('user not found'));
+  }
+  const camp = await campModel.findById(campId);
+  if (!camp) {
+    return next(new Error('camp not found'));
+  }
+
+  const bookingPrice = camp.price * numDays;
+  const localtimeStamp = new Date().toLocaleString();
+  const newBooking = await Booking.create({
+    user: userId,
+    camp: campId,
+    bookingPrice: bookingPrice,
+    localtimeStamp: localtimeStamp,
+    numDays: numDays,
+  });
+
+  if (!newBooking) {
+    return next(new Error('cannot create booking'));
+  }
+
+  res.sendStatus(200);
+};
+
 module.exports = {
   pagination,
   postCamp,
@@ -103,4 +136,5 @@ module.exports = {
   updateCamp,
   deleteCamp,
   campFileUpload,
+  userBookCamp,
 };

@@ -6,6 +6,12 @@ const jwtTokenGen = async (data) => {
   }));
 };
 
+const jwtDecode = async (token) => {
+  const { data } = jwt.verify(token, process.env.JWT_SECRET);
+  return data;
+};
+
 module.exports = {
   jwtTokenGen,
+  jwtDecode,
 };
