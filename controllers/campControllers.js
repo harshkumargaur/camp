@@ -3,14 +3,19 @@ const User = require('../models/User');
 const Booking = require('../models/Booking');
 
 //utils
+const { validatorErrors } = require('./../utils/validatorSchema');
 const paginationUtilty = require('.././utils/paginationHelper');
 
-const pagination = async (pageNo, res, next) => {
+const pagination = async (req, res, next, pageNo) => {
+  const errorArr = validatorErrors(req);
+
+  if (errorArr.length !== 0) {
+    return next(new Error(...[errorArr]));
+  }
   const camps = await paginationUtilty(campModel, pageNo);
 
   if (camps.length === 0) {
-    return res.json({
-      status: 200,
+    return res.status(200).json({
       message: 'please add a new camp',
     });
   }
@@ -26,6 +31,12 @@ const pagination = async (pageNo, res, next) => {
 };
 
 const postCamp = async (req, res, next) => {
+  const errorArr = validatorErrors(req);
+  console.log(errorArr);
+
+  if (errorArr.length !== 0) {
+    return next(new Error(...[errorArr]));
+  }
   const newCamp = campModel({
     name: req.body.name,
     price: req.body.price,
@@ -41,11 +52,18 @@ const postCamp = async (req, res, next) => {
 const getCampById = async (req, res, next) => {
   // console.log('get camp by id');
 
+  const errorArr = validatorErrors(req);
+  console.log(errorArr);
+
+  if (errorArr.length !== 0) {
+    return next(new Error(...[errorArr]));
+  }
+
   const { campId } = req.params;
   const camp = await campModel.findById(campId);
 
   if (camp) {
-    return res.json({
+    return res.status(200).json({
       status: 200,
       camp,
     });
@@ -55,6 +73,12 @@ const getCampById = async (req, res, next) => {
 };
 
 const updateCamp = async (req, res, next) => {
+  const errorArr = validatorErrors(req);
+  console.log(errorArr);
+
+  if (errorArr.length !== 0) {
+    return next(new Error(...[errorArr]));
+  }
   const { campId } = req.params;
   const { name, price, about } = req.body;
   const update = await campModel.findByIdAndUpdate(campId, {
@@ -70,6 +94,12 @@ const updateCamp = async (req, res, next) => {
 };
 
 const deleteCamp = async (req, res, next) => {
+  const errorArr = validatorErrors(req);
+  console.log(errorArr);
+
+  if (errorArr.length !== 0) {
+    return next(new Error(...[errorArr]));
+  }
   const { campId } = req.params;
   const del = await campModel.findByIdAndDelete(campId);
   if (!del) {
@@ -100,6 +130,15 @@ const campFileUpload = async (req, res, next) => {
 
 const userBookCamp = async (req, res, next) => {
   console.log('user book camp');
+  const errorArr = validatorErrors(req);
+  console.log(errorArr);
+  console.log(req.body.numDays);
+
+  if (errorArr.length !== 0) {
+    return next(new Error(...[errorArr]));
+  }
+
+  return;
   const { campId } = req.params;
   const userId = req.user;
   const { numDays } = req.body;

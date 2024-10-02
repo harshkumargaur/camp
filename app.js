@@ -2,6 +2,8 @@ require('@dot/env');
 const crypto = require('crypto');
 const process = require('process');
 const path = require('path');
+const helmet = require('helmet');
+const cors = require('cors');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -9,6 +11,9 @@ const express = require('express');
 const app = express();
 const { paymentWebhook } = require('./utils/webhookUtility');
 
+app.disable('x-powered-by');
+app.use(cors());
+app.use(helmet());
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -42,6 +47,9 @@ app.use((err, req, res, next) => {
 
 app.listen(process.env.PORT, async (err) => {
   await mongoose.connect(process.env.MONGO_URL);
+  console.log(
+    'server is running at  https://absolute-epic-dogfish.ngrok-free.app'
+  );
   console.log('connected');
 });
 
