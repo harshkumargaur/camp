@@ -4,19 +4,21 @@ const User = require('./../models/User');
 const bcrypt = require('bcrypt');
 
 const { jwtTokenGen } = require('./../utils/jwtUtility');
+const { validatorErrors } = require('./../utils/validatorSchema');
 
 const userSignUp = async (req, res, next) => {
+  const errorArr = validatorErrors(req);
+  console.log(errorArr);
+
+  if (errorArr.length !== 0) {
+    return next(new Error(...[errorArr]));
+  }
   const { email, password } = req.body;
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const user = await User.findOne({ email: email });
-
   const dateTimeLogin = `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`;
 
-  if (user) {
-    return next(new Error('please login you have already signed up'));
-  }
   const newUser = await User.create({
     email: email,
     password: hashedPassword,
@@ -34,12 +36,14 @@ const userSignUp = async (req, res, next) => {
 
 const userLogin = async (req, res, next) => {
   console.log('entered login');
+  const errorArr = validatorErrors(req);
+  console.log(errorArr);
+
+  if (errorArr.length !== 0) {
+    return next(new Error(...[errorArr]));
+  }
   const { email, password } = req.body;
   const user = await User.findOne({ email: email });
-
-  if (!user) {
-    return next(new Error('user not exists'));
-  }
 
   const hashedPasswordMatch = await bcrypt.compare(password, user.password);
   if (!hashedPasswordMatch) {
@@ -58,6 +62,12 @@ const userLogin = async (req, res, next) => {
 
 const userForgotPassword = async (req, res, next) => {
   console.log('user forgot password');
+  const errorArr = validatorErrors(req);
+  console.log(errorArr);
+
+  if (errorArr.length !== 0) {
+    return next(new Error(...[errorArr]));
+  }
   const { email } = req.body;
   const user = await User.findOne({ email: email });
   if (!user) {
@@ -73,6 +83,12 @@ const userForgotPassword = async (req, res, next) => {
 
 const userResetPassword = async (req, res, next) => {
   console.log('user reset password');
+  const errorArr = validatorErrors(req);
+  console.log(errorArr);
+
+  if (errorArr.length !== 0) {
+    return next(new Error(...[errorArr]));
+  }
   const { resetToken } = req.params;
   const { newPassword } = req.body;
   const user = await User.findOne({ resetToken: resetToken });

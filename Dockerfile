@@ -1,19 +1,7 @@
-# Use Node.js v14
-FROM node:16
-
-# Create app directory
-WORKDIR /usr/src/app
-
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-COPY package*.json ./
-
+# port forwarding : docker run -p 8000:8000 username/camp
+FROM node:16-alpine
+WORKDIR /usr/app
+COPY ./package.json ./
 RUN npm install
-
-# Bundle app source
-COPY . .
-
-# Expose the port
-EXPOSE 8000
-
-CMD [ "node", "app.js" ]
+COPY ./ ./
+CMD ["npm","start"]

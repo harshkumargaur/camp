@@ -8,23 +8,47 @@ const {
   userResetPassword,
 } = require('./../controllers/userController');
 
-router.post('/signup', async (req, res, next) => {
-  userSignUp(req, res, next);
-});
+const {
+  userSignUpSchema,
+  userLoginSchema,
+  userForgotPasswordSchema,
+  userResetPasswordSchema,
+} = require('./../utils/validatorSchema');
+const { checkSchema } = require('express-validator');
 
-router.post('/login', async (req, res, next) => {
-  userLogin(req, res, next);
-});
+router.post(
+  '/signup',
+  checkSchema(userSignUpSchema, ['body']),
+  async (req, res, next) => {
+    userSignUp(req, res, next);
+  }
+);
 
-router.post('/forgot-password', async (req, res, next) => {
-  console.log('entered');
-  userForgotPassword(req, res, next);
-});
+router.post(
+  '/login',
+  checkSchema(userLoginSchema, ['body']),
+  async (req, res, next) => {
+    userLogin(req, res, next);
+  }
+);
 
-router.post('/reset-password/:resetToken', async (req, res, next) => {
-  console.log('entered');
-  userResetPassword(req, res, next);
-});
+router.post(
+  '/forgot-password',
+  checkSchema(userForgotPasswordSchema, ['body']),
+  async (req, res, next) => {
+    console.log('entered');
+    userForgotPassword(req, res, next);
+  }
+);
+
+router.post(
+  '/reset-password/:resetToken',
+  checkSchema(userResetPasswordSchema, ['body', 'params']),
+  async (req, res, next) => {
+    console.log('entered');
+    userResetPassword(req, res, next);
+  }
+);
 
 // router.get('/', async (req, res, next) => {
 //   console.log('entered');
