@@ -10,14 +10,17 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
 const { paymentWebhook } = require('./utils/webhookUtility');
+const { limiter } = require('./utils/rateLimit');
 
 app.disable('x-powered-by');
+app.set('trust proxy', 1);
 app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/user', limiter);
 
 ////models
 
