@@ -138,7 +138,6 @@ const userBookCamp = async (req, res, next) => {
     return next(new Error(...[errorArr]));
   }
 
-  return;
   const { campId } = req.params;
   const userId = req.user;
   const { numDays } = req.body;

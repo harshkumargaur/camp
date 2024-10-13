@@ -1,8 +1,9 @@
 require('@dot/env');
-const crypto = require('crypto');
+const { createLogger } = require('winston');
+const compression = require('compression');
 const process = require('process');
 const path = require('path');
-const helmet = require('helmet');
+// const helmet = require('helmet');
 const cors = require('cors');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
@@ -11,11 +12,19 @@ const express = require('express');
 const app = express();
 const { paymentWebhook } = require('./utils/webhookUtility');
 const { limiter } = require('./utils/rateLimit');
+const loggerOptions = require('./utils/logger');
 
+createLogger(loggerOptions);
 app.disable('x-powered-by');
+// creating problems with web integration of razorpay
+// app.use(
+//   helmet({
+//     contentSecurityPolicy: false,
+//   })
+// );
+app.use(compression());
 app.set('trust proxy', 1);
 app.use(cors());
-app.use(helmet());
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

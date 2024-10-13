@@ -39,7 +39,7 @@ const createOrderForBokoingRazorpay = async (req, res, next) => {
   console.log(razorpayorder);
   booking.razorpayOrderId = razorpayorder.id;
   await booking.save();
-  return res.sendStatus(200);
+  return res.status(200).json(razorpayorder);
   // console.log(data);
 };
 
