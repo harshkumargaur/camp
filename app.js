@@ -31,9 +31,7 @@ app.use(bodyParser.json());
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/user', limiter);
 
-////models
-
-////controller
+// TODO: mob no otp login
 
 //Router
 const campRouter = require('./routes/campRoutes');

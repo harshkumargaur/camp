@@ -1,7 +1,8 @@
 const crypto = require('crypto');
+const bcrypt = require('bcrypt');
 
 const User = require('./../models/User');
-const bcrypt = require('bcrypt');
+const Otp = require('./../models/Otp');
 
 const { jwtTokenGen } = require('./../utils/jwtUtility');
 const { validatorErrors } = require('./../utils/validatorSchema');
@@ -103,9 +104,64 @@ const userResetPassword = async (req, res, next) => {
   res.sendStatus(200);
 };
 
+const userMobileOtpLogin = async (req, res, next) => {
+  console.log('entered otp login');
+  const errorArr = validatorErrors(req);
+  console.log(errorArr);
+
+  if (errorArr.length !== 0) {
+    return next(new Error(...[errorArr]));
+  }
+
+  const otp = Math.trunc(Math.random() * 1000000);
+  const hashedOtp = await bcrypt.hash(String(otp), 10);
+  const { phoneNo } = req.body;
+
+  const newOtp = new Otp({
+    otp: hashedOtp,
+    phoneNo: phoneNo,
+  });
+  await newOtp.save();
+  res.status(200).json({
+    otp: otp,
+  });
+};
+
+const mobileOtpVerify = async (req, res, next) => {
+  console.log('entered otp verify');
+  const errorArr = validatorErrors(req);
+  console.log(errorArr);
+
+  if (errorArr.length !== 0) {
+    return next(new Error(...[errorArr]));
+  }
+
+  const { phoneNo, otp } = req.body;
+  const reqOtp = await Otp.findOne({
+    phoneNo: phoneNo,
+  });
+
+  const otpMatched = await bcrypt.compare(otp, reqOtp.otp);
+
+  if (!otpMatched) return next(new Error('otp not matched'));
+
+  if (!reqOtp) return next(new Error('otp expired'));
+
+  const user = await User.create({
+    phone: phoneNo,
+  });
+
+  const token = await jwtTokenGen(user._id);
+  res.status(200).json({
+    token,
+  });
+};
+
 module.exports = {
   userSignUp,
   userLogin,
   userForgotPassword,
   userResetPassword,
+  userMobileOtpLogin,
+  mobileOtpVerify,
 };

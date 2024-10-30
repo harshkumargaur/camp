@@ -1,4 +1,4 @@
-const { validationResult } = require('express-validator');
+const { validationResult, oneOf } = require('express-validator');
 const User = require('./../models/User');
 
 const pageNoSchema = {
@@ -98,6 +98,36 @@ const userResetPasswordSchema = {
   },
 };
 
+const userMobileNoLoginSchema = {
+  phoneNo: {
+    isMobilePhone: {
+      options: ['en-IN', { strictMode: true }],
+      errorMessage: 'provide valid mob no',
+    },
+    notEmpty: true,
+    errorMessage: 'mob no cannot be empty',
+  },
+};
+
+const otpVerifySchema = {
+  phoneNo: {
+    isMobilePhone: {
+      options: ['en-IN', { strictMode: true }],
+      errorMessage: 'provide valid mob no',
+    },
+    notEmpty: true,
+    errorMessage: 'mob no cannot be empty',
+  },
+  otp: {
+    isLength: {
+      options: { min: 6, max: 6 },
+      errorMessage: 'please provide correct otp',
+    },
+    notEmpty: true,
+    errorMessage: 'otp cannot be empty',
+  },
+};
+
 const validatorErrors = (req) => {
   const result = validationResult(req);
   const errors = result.formatWith((error) => error.msg).array();
@@ -113,5 +143,7 @@ module.exports = {
   userLoginSchema,
   userForgotPasswordSchema,
   userResetPasswordSchema,
+  userMobileNoLoginSchema,
+  otpVerifySchema,
   validatorErrors,
 };

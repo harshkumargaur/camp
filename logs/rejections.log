@@ -1,0 +1,39 @@
+
+2024-10-21T07:36:48.792Z [exception or rejection] error: unhandledRejection: querySrv ETIMEOUT _mongodb._tcp.cluster0.jgvts.mongodb.net
+Error: querySrv ETIMEOUT _mongodb._tcp.cluster0.jgvts.mongodb.net
+    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:275:17)
+ *******************************************************
+
+2024-10-24T23:49:04.758Z [exception or rejection] error: unhandledRejection: data must be a string or Buffer and salt must either be a salt string or a number of rounds
+Error: data must be a string or Buffer and salt must either be a salt string or a number of rounds
+    at Object.hash (D:\node\camp\node_modules\bcrypt\bcrypt.js:144:17)
+    at D:\node\camp\node_modules\bcrypt\promises.js:29:12
+    at new Promise (<anonymous>)
+    at module.exports.promise (D:\node\camp\node_modules\bcrypt\promises.js:20:12)
+    at Object.hash (D:\node\camp\node_modules\bcrypt\bcrypt.js:133:25)
+    at userMobileOtpLogin (D:\node\camp\controllers\userController.js:117:34)
+    at D:\node\camp\routes\userRoutes.js:60:5
+    at Layer.handle [as handle_request] (D:\node\camp\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\node\camp\node_modules\express\lib\router\route.js:149:13)
+    at middleware (D:\node\camp\node_modules\express-validator\lib\middlewares\check.js:16:13)
+ *******************************************************
+
+2024-10-30T03:35:08.910Z [exception or rejection] error: unhandledRejection: otp is not defined
+ReferenceError: otp is not defined
+    at mobileOtpVerify (D:\node\camp\controllers\userController.js:139:10)
+    at D:\node\camp\routes\userRoutes.js:69:5
+    at Layer.handle [as handle_request] (D:\node\camp\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\node\camp\node_modules\express\lib\router\route.js:149:13)
+    at middleware (D:\node\camp\node_modules\express-validator\lib\middlewares\check.js:16:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+ *******************************************************
+
+2024-10-30T03:38:26.133Z [exception or rejection] error: unhandledRejection: otp is not defined
+ReferenceError: otp is not defined
+    at mobileOtpVerify (D:\node\camp\controllers\userController.js:139:10)
+    at D:\node\camp\routes\userRoutes.js:69:5
+    at Layer.handle [as handle_request] (D:\node\camp\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\node\camp\node_modules\express\lib\router\route.js:149:13)
+    at middleware (D:\node\camp\node_modules\express-validator\lib\middlewares\check.js:16:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+ *******************************************************

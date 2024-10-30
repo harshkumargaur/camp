@@ -6,6 +6,8 @@ const {
   userLogin,
   userForgotPassword,
   userResetPassword,
+  mobileOtpVerify,
+  userMobileOtpLogin,
 } = require('./../controllers/userController');
 
 const {
@@ -13,6 +15,8 @@ const {
   userLoginSchema,
   userForgotPasswordSchema,
   userResetPasswordSchema,
+  userMobileNoLoginSchema,
+  otpVerifySchema,
 } = require('./../utils/validatorSchema');
 const { checkSchema } = require('express-validator');
 
@@ -50,8 +54,20 @@ router.post(
   }
 );
 
-// router.get('/', async (req, res, next) => {
-//   console.log('entered');
-// });
+router.post(
+  '/mobile-otp-login',
+  checkSchema(userMobileNoLoginSchema, ['body']),
+  async (req, res, next) => {
+    userMobileOtpLogin(req, res, next);
+  }
+);
+
+router.post(
+  '/mobile-otp-verify',
+  checkSchema(otpVerifySchema, ['body']),
+  async (req, res, next) => {
+    mobileOtpVerify(req, res, next);
+  }
+);
 
 module.exports = router;

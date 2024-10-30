@@ -1,4 +1,6 @@
 {
+  "source": "app.js",
+  "main": "dist/app.js",
   "dependencies": {
     "@dot/env": "^0.1.5",
     "axios": "^1.7.7",
